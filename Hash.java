@@ -40,6 +40,9 @@ public class Hash {
 
 		return toBase(""+hash,10,16);
 	}
+	public String getHash(File f) throws Exception {
+		return getHash(readFile(f));
+	}
 
 	public int hashX(String str6, int w3){
 		int w2 = ((str6.charAt(0) << 8) | str6.charAt(1));
@@ -52,49 +55,53 @@ public class Hash {
 		return 65535 - num;
 	}
 
-	public String readFile(String file){
+	public String readFile(String file) throws Exception{ 
 		File f = new File(file);
 		String content = "";
-		try{
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line = br.readLine();
-			while(line != null){
-				content += line;
-				line = br.readLine();
-			}
-			br.close();
-		}catch(Exception ex){
-			ex.printStackTrace();
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String line = br.readLine();
+		while(line != null){
+			content += ("\n"+line);
+			line = br.readLine();
 		}
-		return content;
+		br.close();
+		return content.substring(1,content.length());
 	}
 
-	public boolean checkHashFile(String file){
+	public String readFile(File f) throws Exception {
+		return readFile(f.getAbsolutePath());
+	}
+
+	public boolean checkHashFile(String file) throws Exception {
 		String content = readFile(file);
 		int length = content.length();
-		String hash = getHash(content.substring(0, length - 4));
-		return (hash.equals(content.substring(length - 4, length))) ? true : false;
+		String hash = getHash(content.substring(0, length - 5));
+		return (hash.equals(content.substring(length - 5, length))) ? true : false;
 	}
 
-	public void generateHashFile(String file){
+	public boolean checkHashFile(File f) throws Exception {
+		return checkHashFile(f.getAbsolutePath());
+	}
+
+	public void generateHashFile(String file) throws Exception{
 		File f = new File(file);
-		try{
-			String content = readFile(file);
-			String hash = getHash(content);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file.replace(".txt","_h.txt")));
-			for(int i = 0; i < content.length(); i++){
-				if(content.charAt(i) == '\n'){
-					bw.newLine();
-				}else{
-					bw.write(content.charAt(i));
-				}
+		String content = readFile(file);
+		String hash = getHash(content);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(file.replace(".txt","_h.txt")));
+		for(int i = 0; i < content.length(); i++){
+			if(content.charAt(i) == '\n'){
+				bw.newLine();
+			}else{
+				bw.write(content.charAt(i));
 			}
-			bw.newLine();
-			bw.write(hash);
-			bw.close();
-		}catch(Exception ex){
-			ex.printStackTrace();
 		}
+		bw.newLine();
+		bw.write(hash);
+		bw.close();
+	}
+
+	public void generateHashFile(File f) throws Exception {
+		generateHashFile(f.getAbsolutePath());
 	}
 	
 }

@@ -1,8 +1,9 @@
 public class Main {
 	public static void main(String[] args) {
 		Hash h = new Hash();
-		String str = "Máquina Enigma";
-		System.out.println(h.getHash(str));		
+		
+		//h.generateHashFile("elvis.txt");
 
+		System.out.println(h.checkHashFile("elvis_h.txt"));
 	}
 }

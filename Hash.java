@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
 public class Hash {
 	public static int A = 0x5a82;
@@ -48,6 +50,51 @@ public class Hash {
 
 	public int negate(int num){
 		return 65535 - num;
+	}
+
+	public String readFile(String file){
+		File f = new File(file);
+		String content = "";
+		try{
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line = br.readLine();
+			while(line != null){
+				content += line;
+				line = br.readLine();
+			}
+			br.close();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return content;
+	}
+
+	public boolean checkHashFile(String file){
+		String content = readFile(file);
+		int length = content.length();
+		String hash = getHash(content.substring(0, length - 4));
+		return (hash.equals(content.substring(length - 4, length))) ? true : false;
+	}
+
+	public void generateHashFile(String file){
+		File f = new File(file);
+		try{
+			String content = readFile(file);
+			String hash = getHash(content);
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file.replace(".txt","_h.txt")));
+			for(int i = 0; i < content.length(); i++){
+				if(content.charAt(i) == '\n'){
+					bw.newLine();
+				}else{
+					bw.write(content.charAt(i));
+				}
+			}
+			bw.newLine();
+			bw.write(hash);
+			bw.close();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 }

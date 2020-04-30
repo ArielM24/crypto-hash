@@ -42,7 +42,7 @@ public class Window extends JFrame {
 		add(tfFile);
 
 		lblHash = new JLabel("Hash:");
-		lblHash.setBounds(10,90,200,30);
+		lblHash.setBounds(10,90,500,30);
 		add(lblHash);
 
 		taFile = new JTextArea();
